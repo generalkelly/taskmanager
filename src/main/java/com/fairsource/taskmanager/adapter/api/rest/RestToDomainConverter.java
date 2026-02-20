@@ -1,5 +1,6 @@
 package com.fairsource.taskmanager.adapter.api.rest;
 
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 import com.fairsource.taskmanager.adapter.api.rest.model.AddTaskRequest;
@@ -12,18 +13,17 @@ import jakarta.validation.constraints.NotNull;
 @Component
 public class RestToDomainConverter {
 
-	public Task convert(AddTaskRequest addTaskRequest) {
+	public @NonNull Task convert(AddTaskRequest addTaskRequest) {
 		Task task = new Task();
 		task.setName(addTaskRequest.name());
 		task.setPriority(convert(addTaskRequest.priority()));
 		return task;
 	}
 
-	public Task convert(UpdateTaskRequest updateTaskRequest) {
+	public @NonNull Task convert(UpdateTaskRequest updateTaskRequest) {
 		Task task = new Task();
 		task.setName(updateTaskRequest.name());
 		task.setDone(updateTaskRequest.done());
-		task.setPriority(convert(updateTaskRequest.priority()));
 		return task;
 	}
 

@@ -1,46 +1,67 @@
 package com.fairsource.taskmanager.adapter.internal.db;
 
 import java.util.List;
+import java.util.Optional;
+
+import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Component;
 
 import com.fairsource.taskmanager.adapter.internal.db.jpa.TaskRepository;
+import com.fairsource.taskmanager.adapter.internal.db.jpa.model.TaskEntity;
+import com.fairsource.taskmanager.domain.exception.TaskNotFoundException;
 import com.fairsource.taskmanager.domain.model.Task;
 import com.fairsource.taskmanager.domain.usecases.acl.TaskAdministrationPort;
 
+import jakarta.transaction.Transactional;
+
+@Component
 public class TaskAdministrationDatabaseAdapter implements TaskAdministrationPort {
 
-	private final DomainToJpaConverter domainToJpaConverter;
 	private final JpaToDomainConverter jpaToDomainConverter;
 	private final TaskRepository taskRepository;
 
-	public TaskAdministrationDatabaseAdapter(DomainToJpaConverter domainToJpaConverter,
-			JpaToDomainConverter jpaToDomainConverter, TaskRepository taskRepository) {
-		this.domainToJpaConverter = domainToJpaConverter;
+	public TaskAdministrationDatabaseAdapter(JpaToDomainConverter jpaToDomainConverter, TaskRepository taskRepository) {
 		this.jpaToDomainConverter = jpaToDomainConverter;
 		this.taskRepository = taskRepository;
 	}
 
 	@Override
-	public void addTask(Task task) {
-		// TODO Auto-generated method stub
-
+	public void addTask(@NonNull Task task) {
+		TaskEntity taskEntity = new TaskEntity();
+		taskEntity.setName(task.getName());
+		taskEntity.setPriority(task.getPriority().name());
+		taskRepository.save(taskEntity);
 	}
 
+	@Transactional
 	@Override
-	public void updateTask(Integer id, Task task) {
-		// TODO Auto-generated method stub
-
+	public void updateTask(@NonNull Integer id, @NonNull Task task) {
+		Optional<TaskEntity> optionalTaskEntity = taskRepository.findById(id);
+		optionalTaskEntity.ifPresentOrElse(taskEntity -> {
+			taskEntity.setDone(task.isDone());
+			taskEntity.setName(task.getName());
+			taskEntity.setPriority(task.getPriority().name());
+			taskRepository.save(taskEntity);
+		}, () -> {
+			throw new TaskNotFoundException();
+		});
 	}
 
+	@Transactional
 	@Override
-	public void deleteTask(Integer id) {
-		// TODO Auto-generated method stub
-
+	public void deleteTask(@NonNull Integer id) {
+		try {
+			taskRepository.deleteById(id);
+		} catch (OptimisticLockingFailureException e) {
+			throw new TaskEntityWasAlteredOrRemovedException();
+		}
 	}
 
 	@Override
 	public List<Task> retrieveTasks() {
-		// TODO Auto-generated method stub
-		return null;
+		return jpaToDomainConverter
+				.convert(taskRepository.findAll().stream().sorted().toList());
 	}
 
 }

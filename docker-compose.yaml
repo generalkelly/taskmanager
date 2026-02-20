@@ -1,0 +1,24 @@
+services:
+  taskmanager-backend:
+    image: 'taskmanager:latest'
+    build:
+      context: .
+    container_name: taskmanager-backend
+    depends_on:
+      - taskmanager-postgres
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://taskmanager-postgres:5432/taskmanager-postgres
+      - SPRING_DATASOURCE_USERNAME=taskmanager-postgres
+      - SPRING_DATASOURCE_PASSWORD=taskmanager-postgres-pwd
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=none
+    ports:
+      - 8080:8080
+
+  taskmanager-postgres:
+    image: 'postgres:13.1-alpine'
+    container_name: taskmanager-postgres
+    environment:
+      - POSTGRES_USER=taskmanager-postgres
+      - POSTGRES_PASSWORD=taskmanager-postgres-pwd
+    ports:
+      - 5432:5432

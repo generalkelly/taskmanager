@@ -44,23 +44,23 @@ public class TaskController {
 		this.retrieveTasksScenario = retrieveTasksScenario;
 	}
 
-	@PutMapping(name = "add")
+	@PutMapping(value = "add")
 	public void addTask(@RequestBody AddTaskRequest addTaskRequest) {
 		addTaskScenario.addTask(restToDomainConverter.convert(addTaskRequest));
 	}
 
-	@PatchMapping(name = "update/{id}")
+	@PatchMapping(value = "update/{id}")
 	public void updateTask(@RequestParam @NotNull Integer id,
 			@RequestBody @NotNull UpdateTaskRequest updateTaskRequest) {
 		updateTaskScenario.updateTask(id, restToDomainConverter.convert(updateTaskRequest));
 	}
 
-	@DeleteMapping(name = "delete/{id}")
+	@DeleteMapping(value = "delete/{id}")
 	public void deleteTask(@RequestParam @NotNull Integer id) {
 		deleteTaskScenario.deleteTask(id);
 	}
 
-	@GetMapping(name = "get-all")
+	@GetMapping(value = "get-all")
 	public GetAllTasksResponse getAllTasks() {
 		return domainToRestConverter.convert(retrieveTasksScenario.retrieveTask());
 	}

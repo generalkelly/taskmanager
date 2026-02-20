@@ -1,5 +1,6 @@
 package com.fairsource.taskmanager.domain.usecases.scenarios;
 
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import com.fairsource.taskmanager.domain.model.Task;
@@ -14,7 +15,7 @@ public class AddTaskScenario {
 		this.taskAdministrationPort = taskAdministrationPort;
 	}
 	
-	public void addTask(Task task) {
+	public void addTask(@NonNull Task task) {
 		taskAdministrationPort.addTask(task);
 	}
 	

@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.fairsource.taskmanager.adapter.internal.db.jpa.model.TaskEntity;
 
 @Repository
-public interface TaskRepository extends JpaRepository<Integer, TaskEntity> {
+public interface TaskRepository extends JpaRepository<TaskEntity, Integer> {
 
 }
