@@ -6,6 +6,14 @@ A simple task manager application built with Spring Boot and PostgreSQL.
 
 The project uses Docker Compose to start a PostgreSQL database and the Spring Boot backend.
 
+First, build the application JAR using the Maven wrapper:
+
+```bash
+./mvnw clean install
+```
+
+Then build the Docker image and start the services:
+
 ```bash
 docker-compose build
 docker-compose up -d

@@ -5,7 +5,8 @@ services:
       context: .
     container_name: taskmanager-backend
     depends_on:
-      - taskmanager-postgres
+      taskmanager-postgres:
+        condition: service_healthy
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://taskmanager-postgres:5432/taskmanager-postgres
       - SPRING_DATASOURCE_USERNAME=taskmanager-postgres
@@ -20,5 +21,11 @@ services:
     environment:
       - POSTGRES_USER=taskmanager-postgres
       - POSTGRES_PASSWORD=taskmanager-postgres-pwd
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U taskmanager-postgres -d taskmanager-postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
     ports:
       - 5432:5432
