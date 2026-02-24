@@ -1,44 +1,39 @@
 # taskmanager
 
-A simple task manager application built with Spring Boot and PostgreSQL.
+A task manager application with a Spring Boot backend and Flutter web frontend.
+
+## Project structure
+
+```
+taskmanager/
+├── backend/          Spring Boot REST API + PostgreSQL
+├── frontend/         Flutter web app served via nginx
+└── taskmanager_client_lib/   Generated Dart API client
+```
 
 ## Running the application
 
-The project uses Docker Compose to start a PostgreSQL database and the Spring Boot backend.
-
-First, build the application JAR using the Maven wrapper:
+Build the backend JAR first, then start everything with Docker Compose:
 
 ```bash
+cd backend
 ./mvnw clean install
+cd ..
+docker-compose up --build
 ```
 
-Then build the Docker image and start the services:
+This starts three containers:
 
-```bash
-docker-compose build
-docker-compose up -d
-```
+| Service    | Description              | URL                    |
+|------------|--------------------------|------------------------|
+| Frontend   | Flutter web app (nginx)  | http://localhost       |
+| Backend    | Spring Boot REST API     | http://localhost:8080  |
+| PostgreSQL | Database                 | localhost:5432         |
 
-## Ports
-
-| Service    | Container Port | Default Host Port |
-|------------|---------------|-------------------|
-| Backend    | 8080          | 8080              |
-| PostgreSQL | 5432          | 5432              |
-
-To override the host ports, edit the `ports` mapping in `docker-compose.yaml`. For example, to expose the backend on port 9090 instead:
-
-```yaml
-ports:
-  - 9090:8080
-```
+The frontend proxies API requests to the backend through nginx, so everything works from a single browser tab at `http://localhost`.
 
 ## Swagger UI
 
-Once the application is running, the API documentation is available at:
-
-http://localhost:{HOST_PORT}/taskmanager/swagger-ui/index.html
-
-With the default port configuration this would be:
+API documentation is available at:
 
 http://localhost:8080/taskmanager/swagger-ui/index.html

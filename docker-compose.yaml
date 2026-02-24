@@ -2,7 +2,7 @@ services:
   taskmanager-backend:
     image: 'taskmanager:latest'
     build:
-      context: .
+      context: ./backend
     container_name: taskmanager-backend
     depends_on:
       taskmanager-postgres:
@@ -14,6 +14,17 @@ services:
       - SPRING_JPA_HIBERNATE_DDL_AUTO=none
     ports:
       - 8080:8080
+
+  taskmanager-frontend:
+    image: 'taskmanager-frontend:latest'
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: taskmanager-frontend
+    depends_on:
+      - taskmanager-backend
+    ports:
+      - 80:80
 
   taskmanager-postgres:
     image: 'postgres:13.1-alpine'
