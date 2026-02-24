@@ -83,7 +83,7 @@ public class TaskEntity implements Comparable<TaskEntity> {
 
 	@Override
 	public int compareTo(TaskEntity arg0) {
-		return this.id - arg0.id;
+		return Integer.compare(this.id, arg0.id);
 	}
 
 }

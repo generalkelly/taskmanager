@@ -38,7 +38,7 @@ public class RestToDomainConverter {
 		case URGENT: {
 			return Priority.URGENT;
 		}
-		default:
+		default: // LOW is the default priority expected from the frontend
 			return Priority.LOW;
 		}
 	}

@@ -4,7 +4,7 @@ import java.time.OffsetDateTime;
 
 public class Task {
 
-	private int id;
+	private Integer id;
 
 	private String name;
 
@@ -14,11 +14,11 @@ public class Task {
 
 	private Priority priority;
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

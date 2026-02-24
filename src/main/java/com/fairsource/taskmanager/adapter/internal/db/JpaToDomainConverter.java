@@ -20,7 +20,12 @@ public class JpaToDomainConverter {
 		task.setId(taskEntity.getId());
 		task.setName(taskEntity.getName());
 		task.setDone(taskEntity.isDone());
-		task.setPriority(Priority.valueOf(taskEntity.getPriority()));
+		try {
+			task.setPriority(Priority.valueOf(taskEntity.getPriority()));
+		} catch (IllegalArgumentException e) {
+			throw new IllegalStateException(
+					"Unknown priority value in database: " + taskEntity.getPriority(), e);
+		}
 		task.setCreated(taskEntity.getCreated());
 		return task;
 	}

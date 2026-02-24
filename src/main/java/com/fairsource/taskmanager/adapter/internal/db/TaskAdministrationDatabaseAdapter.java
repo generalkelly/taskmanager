@@ -13,7 +13,7 @@ import com.fairsource.taskmanager.domain.exception.TaskNotFoundException;
 import com.fairsource.taskmanager.domain.model.Task;
 import com.fairsource.taskmanager.domain.usecases.acl.TaskAdministrationPort;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class TaskAdministrationDatabaseAdapter implements TaskAdministrationPort {
@@ -43,13 +43,16 @@ public class TaskAdministrationDatabaseAdapter implements TaskAdministrationPort
 			taskEntity.setName(task.getName());
 			taskRepository.save(taskEntity);
 		}, () -> {
-			throw new TaskNotFoundException();
+			throw new TaskNotFoundException(id);
 		});
 	}
 
 	@Transactional
 	@Override
 	public void deleteTask(@NonNull Integer id) {
+		if (!taskRepository.existsById(id)) {
+			throw new TaskNotFoundException(id);
+		}
 		try {
 			taskRepository.deleteById(id);
 		} catch (OptimisticLockingFailureException e) {
@@ -59,8 +62,7 @@ public class TaskAdministrationDatabaseAdapter implements TaskAdministrationPort
 
 	@Override
 	public List<Task> retrieveTasks() {
-		return jpaToDomainConverter
-				.convert(taskRepository.findAll().stream().sorted().toList());
+		return jpaToDomainConverter.convert(taskRepository.findAllByOrderByIdAsc());
 	}
 
 }

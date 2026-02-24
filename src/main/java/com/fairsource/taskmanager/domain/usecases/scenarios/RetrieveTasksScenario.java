@@ -16,7 +16,7 @@ public class RetrieveTasksScenario {
 		this.taskAdministrationPort = taskAdministrationPort;
 	}
 
-	public List<Task> retrieveTask() {
+	public List<Task> retrieveTasks() {
 		return taskAdministrationPort.retrieveTasks();
 	}
 
