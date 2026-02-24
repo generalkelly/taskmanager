@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fairsource.taskmanager.adapter.api.rest.model.AddTaskRequest;
@@ -50,13 +50,13 @@ public class TaskController {
 	}
 
 	@PatchMapping(value = "update/{id}")
-	public void updateTask(@RequestParam @NotNull Integer id,
+	public void updateTask(@PathVariable @NotNull Integer id,
 			@RequestBody @NotNull UpdateTaskRequest updateTaskRequest) {
 		updateTaskScenario.updateTask(id, restToDomainConverter.convert(updateTaskRequest));
 	}
 
 	@DeleteMapping(value = "delete/{id}")
-	public void deleteTask(@RequestParam @NotNull Integer id) {
+	public void deleteTask(@PathVariable @NotNull Integer id) {
 		deleteTaskScenario.deleteTask(id);
 	}
 

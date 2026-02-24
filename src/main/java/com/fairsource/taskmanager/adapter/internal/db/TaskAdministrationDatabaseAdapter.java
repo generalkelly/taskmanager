@@ -41,7 +41,6 @@ public class TaskAdministrationDatabaseAdapter implements TaskAdministrationPort
 		optionalTaskEntity.ifPresentOrElse(taskEntity -> {
 			taskEntity.setDone(task.isDone());
 			taskEntity.setName(task.getName());
-			taskEntity.setPriority(task.getPriority().name());
 			taskRepository.save(taskEntity);
 		}, () -> {
 			throw new TaskNotFoundException();
