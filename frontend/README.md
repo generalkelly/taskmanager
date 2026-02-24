@@ -31,7 +31,7 @@ Note: The backend base URL is configured as a relative path (`/taskmanager`) for
 
 ## Dart API Client (`taskmanager_client_lib`)
 
-The `taskmanager_client_lib/` directory contains a generated Dart client for the backend REST API. It is referenced as a local path dependency in `pubspec.yaml`:
+The `../taskmanager_client_lib/` directory (sibling to `frontend/` in the repo root) contains a generated Dart client for the backend REST API. It is referenced as a local path dependency in `pubspec.yaml`:
 
 ```yaml
 dependencies:
@@ -41,7 +41,7 @@ dependencies:
 
 ### How it is generated
 
-The backend uses `openapi-generator-maven-plugin` to generate a Dart client from the OpenAPI spec at `backend/src/main/resources/api-docs.json`. The full process is:
+The backend uses `openapi-generator-maven-plugin` to generate a Dart client from the OpenAPI spec at `backend/src/main/resources/api-docs.json`. All commands below are run from the **repo root**.
 
 1. **Start the backend** (via `docker-compose up` or running the Spring Boot app directly). The backend uses springdoc to expose the OpenAPI spec at runtime.
 
@@ -52,8 +52,7 @@ The backend uses `openapi-generator-maven-plugin` to generate a Dart client from
 
 3. **Build the backend** to generate the Dart client from the spec:
    ```bash
-   cd backend
-   ./mvnw clean install
+   backend/mvnw -f backend/pom.xml clean install
    ```
    The generated client output is located at `backend/target/generated-sources/openapi/`.
 
