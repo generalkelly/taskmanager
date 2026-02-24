@@ -2,18 +2,32 @@
 
 A Flutter frontend for the Taskmanager application.
 
-## Getting Started
+## Building
 
-This project is a starting point for a Flutter application.
+### Web (via Docker)
 
-A few resources to get you started if this is your first Flutter project:
+The Flutter web build happens automatically inside the Docker image build. See `frontend/Dockerfile` — it uses a multi-stage build that runs `flutter build web` and copies the output into an nginx image. No local Flutter installation is needed.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Web (local)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+cd frontend
+flutter pub get
+flutter build web
+```
+
+The built assets will be in `frontend/build/web/`.
+
+### Native (Linux, macOS, Windows)
+
+```bash
+cd frontend
+flutter pub get
+flutter run          # debug mode
+flutter build linux  # or macos, windows
+```
+
+Note: The backend base URL is configured as a relative path (`/taskmanager`) for the Docker/nginx setup. For native builds, you need to change it to an absolute URL (e.g. `http://localhost:8080/taskmanager`) in `lib/main.dart`.
 
 ## Dart API Client (`taskmanager_client_lib`)
 

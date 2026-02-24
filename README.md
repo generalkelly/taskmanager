@@ -22,6 +22,8 @@ cd ..
 docker-compose up --build
 ```
 
+The backend image packages the pre-built JAR. The frontend image builds the Flutter web app during `docker build` (see `frontend/Dockerfile`) and serves it via nginx.
+
 This starts three containers:
 
 | Service    | Description              | URL                    |
