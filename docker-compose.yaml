@@ -4,6 +4,7 @@ services:
     build:
       context: ./backend
     container_name: taskmanager-backend
+    # Wait for PostgreSQL to be ready before starting
     depends_on:
       taskmanager-postgres:
         condition: service_healthy
@@ -12,6 +13,13 @@ services:
       - SPRING_DATASOURCE_USERNAME=taskmanager-postgres
       - SPRING_DATASOURCE_PASSWORD=taskmanager-postgres-pwd
       - SPRING_JPA_HIBERNATE_DDL_AUTO=none
+    # Backend is healthy once the API responds, so the frontend can start
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/taskmanager/task/v1/get-all || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
     ports:
       - 8080:8080
 
@@ -21,10 +29,12 @@ services:
       context: .
       dockerfile: frontend/Dockerfile
     container_name: taskmanager-frontend
+    # Wait for backend API to be healthy before serving the frontend
     depends_on:
-      - taskmanager-backend
+      taskmanager-backend:
+        condition: service_healthy
     ports:
-      - 80:80
+      - 80:8080
 
   taskmanager-postgres:
     image: 'postgres:13.1-alpine'
@@ -32,6 +42,7 @@ services:
     environment:
       - POSTGRES_USER=taskmanager-postgres
       - POSTGRES_PASSWORD=taskmanager-postgres-pwd
+    # PostgreSQL is healthy once it accepts connections
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U taskmanager-postgres -d taskmanager-postgres"]
       interval: 5s

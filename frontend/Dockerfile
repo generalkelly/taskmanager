@@ -11,7 +11,13 @@ RUN flutter build web
 
 FROM nginx:alpine
 
-COPY --from=build /app/frontend/build/web /usr/share/nginx/html
-COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
+# Move pid file to /tmp so nginx can run as non-root
+RUN sed -i 's|/run/nginx.pid|/tmp/nginx.pid|g' /etc/nginx/nginx.conf && \
+    chown -R nginx:nginx /var/cache/nginx /etc/nginx/conf.d
 
-EXPOSE 80
+COPY --from=build --chown=nginx:nginx /app/frontend/build/web /usr/share/nginx/html
+COPY --chown=nginx:nginx frontend/nginx.conf /etc/nginx/conf.d/default.conf
+
+USER nginx
+
+EXPOSE 8080

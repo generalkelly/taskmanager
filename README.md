@@ -13,16 +13,13 @@ taskmanager/
 
 ## Running the application
 
-Build the backend JAR first, then start everything with Docker Compose:
+No local toolchains (Java, Flutter) are required — everything is built inside Docker:
 
 ```bash
-cd backend
-./mvnw clean install
-cd ..
 docker-compose up --build
 ```
 
-The backend image packages the pre-built JAR. The frontend image builds the Flutter web app during `docker build` (see `frontend/Dockerfile`) and serves it via nginx.
+Both the backend JAR (Maven) and the frontend web app (Flutter) are built during `docker build` in their respective multi-stage Dockerfiles.
 
 This starts three containers:
 
