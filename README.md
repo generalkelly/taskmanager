@@ -29,6 +29,8 @@ This starts three containers:
 | Backend    | Spring Boot REST API     | http://localhost:8080  |
 | PostgreSQL | Database                 | localhost:5432         |
 
+The first build may take a few minutes since Docker needs to download the Flutter SDK and Maven dependencies. The services start in order — PostgreSQL first, then the backend, then the frontend — so the frontend will only become available once the backend API is healthy.
+
 The frontend proxies API requests to the backend through nginx, so everything works from a single browser tab at `http://localhost`.
 
 ## Running from an IDE
