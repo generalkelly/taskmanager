@@ -34,6 +34,20 @@ This starts three containers:
 
 The frontend proxies API requests to the backend through nginx, so everything works from a single browser tab at `http://localhost`.
 
+## Running from an IDE
+
+To run the backend directly from your IDE, start it with the Spring profile `local`:
+
+```
+--spring.profiles.active=local
+```
+
+This activates `application-local.properties`, which configures the datasource to connect to a local PostgreSQL instance and enables debug logging for the application. You still need a running PostgreSQL — start just the database with:
+
+```bash
+docker-compose up taskmanager-postgres
+```
+
 ## Swagger UI
 
 API documentation is available at:
